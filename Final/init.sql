@@ -1,15 +1,25 @@
 CREATE TABLE IF NOT EXISTS public.books
 (
-    id integer NOT NULL DEFAULT nextval('books_id_seq'::regclass),
+    id SERIAL NOT NULL,
     title character varying(255) COLLATE pg_catalog."default" NOT NULL,
     author character varying(255) COLLATE pg_catalog."default" NOT NULL,
     status character varying(255) COLLATE pg_catalog."default" NOT NULL DEFAULT 'Avalible'::character varying,
     CONSTRAINT books_pkey PRIMARY KEY (id)
-)
+);
+
+CREATE TABLE IF NOT EXISTS public.users
+(
+    id SERIAL NOT NULL,
+    username character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    password character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT users_pkey PRIMARY KEY (id),
+    CONSTRAINT users_username_key UNIQUE (username)
+);
 
 CREATE TABLE IF NOT EXISTS public.borrowhistory
 (
-    id integer NOT NULL DEFAULT nextval('borrowhistory_id_seq'::regclass),
+    id SERIAL NOT NULL,
     book_id integer,
     user_id integer,
     borrow_date date NOT NULL DEFAULT CURRENT_DATE,
@@ -23,14 +33,4 @@ CREATE TABLE IF NOT EXISTS public.borrowhistory
         REFERENCES public.users (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
-)
-
-CREATE TABLE IF NOT EXISTS public.users
-(
-    id integer NOT NULL DEFAULT nextval('users_id_seq'::regclass),
-    username character varying(100) COLLATE pg_catalog."default" NOT NULL,
-    name character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    password character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT users_pkey PRIMARY KEY (id),
-    CONSTRAINT users_username_key UNIQUE (username)
 )
